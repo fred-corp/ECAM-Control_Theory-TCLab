@@ -11,9 +11,13 @@ MV : (from ```Open_loop_experiment_on_MV_2022-03-01-09h52.txt```)
   * theta: ```1.7144843527693636```  
 * Graphical :
   * "simple" :
-    * (data)
+    * T = Tg : ```117.593```
+    * θ = Tu : ```7.4074```
   * "complicated" :
-    * (data)
+    * t1 : ```47.06```
+    * t2 : ```72.55```
+    * T : ```140.195```
+    * θ : ```1.178```
 
 ## SOPDT
 
