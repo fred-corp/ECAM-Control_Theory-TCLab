@@ -11,7 +11,7 @@ from kivy.uix.label import Label
 from kivy.properties  import NumericProperty
 from kivy.config import Config
 
-import threading
+from kivy.clock import Clock
 
 import tclab
 
@@ -87,7 +87,7 @@ class app(App):
     tempSensorBox.add_widget(self.tempSensorReadout)
     mainBox.add_widget(tempSensorBox)
 
-    self.updateTemp()
+    Clock.schedule_interval(self.updateTemp, 1)
 
     return mainBox
 
@@ -107,8 +107,7 @@ class app(App):
     self.lab.Q2(self.valDVset)
     self.oldDVLevel.text = "% d"% self.valDVset
 
-  def updateTemp(self):
-    threading.Timer(Ts, self.updateTemp).start()
+  def updateTemp(self, *args):
     self.tempSensorReadout.text = "% d °C"% self.lab.T1
 
 
