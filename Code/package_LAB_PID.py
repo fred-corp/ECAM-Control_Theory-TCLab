@@ -17,17 +17,22 @@ def PID(Ts, previous, E, Kc, Ti, Td, alpha, approximationType, man=False, manMV=
 
   Tfd = alpha * Td
 
+  # Proportional term
   MVp = Kc * E
+
+  # Intergation term
   if approximationType[0] == "TRAP":
     MVi = MVi_previous + ((Kc*Ts)/(2*Ti)) * (E + E_previous)
   elif approximationType[0] == "EBD":
     MVi = MVi_previous + ((Kc*Ts)/Ti) * E
 
+  # Derivative term
   if approximationType[1] == "TRAP":
     MVd = ((Tfd-(Ts/2))/(Tfd+(Ts/2))) * MVd_previous + ((Kc*Td)/(Tfd+(Ts/2))) * (E - E_previous)
   elif approximationType[1] == "EBD":
     MVd = (Tfd/(Tfd+Ts)) * MVd_previous + ((Kc*Td)/(Tfd+Ts)) * (E - E_previous)
   
+  # Manual mode ?
   if man :
     MVi = constrain(manMV, MVmin, MVmax) - MVp - MVd
   else :
@@ -36,6 +41,7 @@ def PID(Ts, previous, E, Kc, Ti, Td, alpha, approximationType, man=False, manMV=
     if (MVp + MVi + MVd) < MVmin :
       MVi = MVmin - MVp
 
+  # Calculate MV
   MV = MVp + MVi + MVd
 
   output = {"MV": MV, "MVp": MVp, "MVi": MVi, "MVd": MVd, "E": E}
