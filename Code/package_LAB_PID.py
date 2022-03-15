@@ -17,7 +17,7 @@ def PID(Ts, previous, E, Kc, Ti, Td, alpha, approximationType, man=False, manMV=
   • Kc : PID gain
   • Ti : PID Integration time constant
   • Td : PID Derivation time constant
-  • alpha : 
+  • alpha : proportional parameter between Td and Tfd
   • approximationType : list of approximation types for integration and derivation ( looks like : ["EBD", "TRAP"])
   • man : boolean, true if manual mode is enabled
   • manMV : manual MV value
