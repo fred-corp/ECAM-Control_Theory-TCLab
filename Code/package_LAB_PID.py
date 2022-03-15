@@ -8,8 +8,23 @@ def constrain(val, min_val, max_val):
   return min(max_val, max(min_val, val))
 
 # PID
-#PID(SP, PV, Man, Kc, Ti, Td, alpha, Ts)
 def PID(Ts, previous, E, Kc, Ti, Td, alpha, approximationType, man=False, manMV=0, MVmin=0, MVmax=100):
+  """
+  parameters : 
+  • Ts : Sample time (seconds)
+  • previous : dictionary with previous values for MVi, MVd, E (looks like : {"MVi": 0, "MVd": 0, "E": 0})
+  • E : difference between PV and SP
+  • Kc : PID gain
+  • Ti : PID Integration time constant
+  • Td : PID Derivation time constant
+  • alpha : 
+  • approximationType : list of approximation types for integration and derivation ( looks like : ["EBD", "TRAP"])
+  • man : boolean, true if manual mode is enabled
+  • manMV : manual MV value
+  • MVmin : minimum value of MV (default : 0)
+  • MVmax : maximum value of MV (default : 100)
+  
+  """    
   # previous is a dict with parameters : MVi, MVd, E
   MVi_previous = previous["MVi"]
   MVd_previous = previous["MVd"]
