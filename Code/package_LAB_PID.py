@@ -8,27 +8,40 @@ def constrain(val, min_val, max_val):
   return min(max_val, max(min_val, val))
 
 # PID
-def PID(Ts, previous, E, Kc, Ti, Td, alpha, approximationType, man=False, manMV=0, MVmin=0, MVmax=100):
+def PID(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, man=False, manMV=[0], MVmin=0, MVmax=100):
   """
   parameters : 
+  • PV : array of all recorded PV values
+  • SP : current SP value
+  • MV : dict of all recorded MV ({"MV" : [0], "MVp" : [0], "MVi": [0], "MVd": [0], "E" : [0]})
   • Ts : Sample time (seconds)
-  • previous : dictionary with previous values for MVi, MVd, E (looks like : {"MVi": 0, "MVd": 0, "E": 0})
-  • E : difference between PV and SP
   • Kc : PID gain
   • Ti : PID Integration time constant
   • Td : PID Derivation time constant
   • alpha : proportional parameter between Td and Tfd
   • approximationType : list of approximation types for integration and derivation ( looks like : ["EBD", "TRAP"])
   • man : boolean, true if manual mode is enabled
-  • manMV : manual MV value
+  • manMV : array of manual MV values
   • MVmin : minimum value of MV (default : 0)
   • MVmax : maximum value of MV (default : 100)
   
-  """    
-  # previous is a dict with parameters : MVi, MVd, E
-  MVi_previous = previous["MVi"]
-  MVd_previous = previous["MVd"]
-  E_previous = previous["E"]
+  """
+  try : 
+    MVi_previous = MV["MVi"][-1]
+  except :
+    MVi_previous = 0
+  
+  try : 
+    MVd_previous = MV["MVd"][-1]
+  except :
+    MVd_previous = 0
+  
+  try : 
+    E_previous = MV["E"][-1]
+  except :
+    E_previous = 0
+
+  E = SP - PV[-1]
 
   Tfd = alpha * Td
 
@@ -49,7 +62,7 @@ def PID(Ts, previous, E, Kc, Ti, Td, alpha, approximationType, man=False, manMV=
   
   # Manual mode ?
   if man :
-    MVi = constrain(manMV, MVmin, MVmax) - MVp - MVd
+    MVi = constrain(manMV[-1], MVmin, MVmax) - MVp - MVd
   else :
     if (MVp + MVi + MVd) > MVmax :
       MVi = MVmax - MVp
