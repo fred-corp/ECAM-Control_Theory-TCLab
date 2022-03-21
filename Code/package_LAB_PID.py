@@ -65,9 +65,9 @@ def PID(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, man=False, manMV=[
     MVi = constrain(manMV[-1], MVmin, MVmax) - MVp - MVd
   else :
     if (MVp + MVi + MVd) > MVmax :
-      MVi = MVmax - MVp
+      MVi = MVmax - MVp - MVd
     if (MVp + MVi + MVd) < MVmin :
-      MVi = MVmin - MVp
+      MVi = MVmin - MVp - MVd
 
   # Calculate MV
   MV = MVp + MVi + MVd
