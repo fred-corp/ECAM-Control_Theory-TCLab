@@ -125,9 +125,9 @@ def IMC_Tuning(K, theta, Tc, T1, T2, T3=0):
   • K : Kp => process gain
   • theta : theta p => process offset
   • Tc : Controller time constant
-  • T1 : first time lag constant
-  • T2 : second time lag constant
-  • T3 : time lead constant
+  • T1 : processus first time constant
+  • T2 : processus second time constant
+  • T3 : processus third time constant
   
   returns Kc, Ti, Td
   """
