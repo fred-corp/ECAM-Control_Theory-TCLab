@@ -114,12 +114,12 @@ def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, PVinit=0, man=F
 def IMC_Tuning(K, theta, Tc, T1, T2, T3=0):
   """
   parameters :
-  • K :
-  • theta :
-  • Tc :
-  • T1 :
-  • T2 :
-  • T3 : 
+  • K : Kp => process gain
+  • theta : theta p => process offset
+  • Tc : Controller time constant
+  • T1 : first time lag constant
+  • T2 : second time lag constant
+  • T3 : time lead constant
   
   returns Kc, Ti, Td
   """
