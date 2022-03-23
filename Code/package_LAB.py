@@ -47,7 +47,7 @@ def constrain(val, min_val, max_val):
   return min(max_val, max(min_val, val))
 
 # PID
-def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, PVinit=0, man=False, manMV=[0], MVmin=0, MVmax=100):
+def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, PVinit=0, man=False, manMV=[0], FF_MV=[0], FF_MV_init=0, MVmin=0, MVmax=100):
   """
   parameters : 
   • PV : array of all recorded PV values
@@ -62,6 +62,8 @@ def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, PVinit=0, man=F
   • PVinit : initial PV value (useful for simulations, default = 0)
   • man : boolean, true if manual mode is enabled (default = false)
   • manMV : array of manual MV values (default = [0])
+  • FF_MV : array of all Feed-Forward MV values (default = [0])
+  • FF_MV_init : initial value for FF_MV (default = 0)
   • MVmin : minimum value of MV (default = 0)
   • MVmax : maximum value of MV (default = 100)
   
@@ -86,6 +88,11 @@ def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, PVinit=0, man=F
   except :
     E = SP - PVinit
 
+  try :
+    MV_FF_previous = FF_MV[-1]
+  except :
+    MV_FF_previous = FF_MV_init
+
   Tfd = alpha * Td
 
   # Proportional term
@@ -105,15 +112,15 @@ def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, PVinit=0, man=F
   
   # Manual mode ?
   if man :
-    MVi = constrain(manMV[-1], MVmin, MVmax) - MVp - MVd
+    MVi = constrain(manMV[-1], MVmin, MVmax) - MVp - MVd - MV_FF_previous
   else :
     if (MVp + MVi + MVd) > MVmax :
-      MVi = MVmax - MVp - MVd
+      MVi = MVmax - MVp - MVd - MV_FF_previous
     if (MVp + MVi + MVd) < MVmin :
-      MVi = MVmin - MVp - MVd
+      MVi = MVmin - MVp - MVd - MV_FF_previous
 
   # Calculate MV
-  MV = MVp + MVi + MVd
+  MV = MVp + MVi + MVd + MV_FF_previous
 
   output = {"MV": MV, "MVp": MVp, "MVi": MVi, "MVd": MVd, "E": E}
   return output
