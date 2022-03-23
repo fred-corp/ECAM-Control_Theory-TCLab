@@ -1,5 +1,5 @@
 # Lead-Lag
-def LeadLag_System(MV,Kp,Tlag,Tlead,Ts,PV,PVInit=0,method='EBD'):
+def LeadLag_RT(MV,Kp,Tlag,Tlead,Ts,PV,PVInit=0,method='EBD'):
   
   """
   The function "FO_RT" needs to be included in a "for or while loop".
@@ -39,7 +39,7 @@ def constrain(val, min_val, max_val):
   return min(max_val, max(min_val, val))
 
 # PID
-def PID(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, man=False, manMV=[0], MVmin=0, MVmax=100):
+def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, man=False, manMV=[0], MVmin=0, MVmax=100):
   """
   parameters : 
   • PV : array of all recorded PV values
