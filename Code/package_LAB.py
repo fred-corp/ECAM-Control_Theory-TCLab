@@ -107,14 +107,10 @@ def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, man=False, manM
   return output
 
 # IMC Tuning
-<<<<<<< HEAD
-=======
 def IMC_Tuning(K, T1, T2, T3=0, theta, Tc):
-    #IMC_Tuning only for an I case (check slide 186/224 of the course)
-    Kc = (T1+T2-T3)/((Tc + theta)*K)
-    Ti = T1 + T2 - T3
-    Td = (T1*T2-(T1 + T2 - T3)*T3)/(T1+T2-T3)
-    return Kc,Ti,Td
-        
-    
->>>>>>> cc163aee07eb5a2fe875a9b2506e19cb9945c47f
+  #IMC_Tuning only for an I case (check slide 186/224 of the course)
+  Kc = (T1+T2-T3)/((Tc + theta)*K)
+  Ti = T1 + T2 - T3
+  Td = (T1*T2-(T1 + T2 - T3)*T3)/(T1+T2-T3)
+  return Kc,Ti,Td
+
