@@ -39,7 +39,7 @@ def constrain(val, min_val, max_val):
   return min(max_val, max(min_val, val))
 
 # PID
-def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, man=False, manMV=[0], MVmin=0, MVmax=100):
+def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, PVinit=0, man=False, manMV=[0], MVmin=0, MVmax=100):
   """
   parameters : 
   • PV : array of all recorded PV values
@@ -51,10 +51,11 @@ def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, man=False, manM
   • Td : PID Derivation time constant
   • alpha : proportional parameter between Td and Tfd
   • approximationType : list of approximation types for integration and derivation ( looks like : ["EBD", "TRAP"])
-  • man : boolean, true if manual mode is enabled
-  • manMV : array of manual MV values
-  • MVmin : minimum value of MV (default : 0)
-  • MVmax : maximum value of MV (default : 100)
+  • PVinit : initial PV value (useful for simulations, default = 0)
+  • man : boolean, true if manual mode is enabled (default = false)
+  • manMV : array of manual MV values (default = [0])
+  • MVmin : minimum value of MV (default = 0)
+  • MVmax : maximum value of MV (default = 100)
   
   """
   try : 
@@ -72,7 +73,10 @@ def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, man=False, manM
   except :
     E_previous = 0
 
-  E = SP - PV[-1]
+  try :
+    E = SP - PV[-1]
+  except :
+    E = SP - PVinit
 
   Tfd = alpha * Td
 
