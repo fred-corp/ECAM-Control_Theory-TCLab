@@ -114,9 +114,9 @@ def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, PVinit=0, man=F
   if man :
     MVi = constrain(manMV[-1], MVmin, MVmax) - MVp - MVd - MV_FF_previous
   else :
-    if (MVp + MVi + MVd) > MVmax :
+    if (MVp + MVi + MVd + MV_FF_previous) > MVmax :
       MVi = MVmax - MVp - MVd - MV_FF_previous
-    if (MVp + MVi + MVd) < MVmin :
+    if (MVp + MVi + MVd + MV_FF_previous) < MVmin :
       MVi = MVmin - MVp - MVd - MV_FF_previous
 
   # Calculate MV
@@ -142,5 +142,6 @@ def IMC_Tuning(K, theta, Tc, T1, T2, T3=0):
   Kc = (T1+T2-T3)/((Tc + theta)*K)
   Ti = T1 + T2 - T3
   Td = (T1*T2-(T1 + T2 - T3)*T3)/(T1+T2-T3)
+
   return Kc,Ti,Td
 
