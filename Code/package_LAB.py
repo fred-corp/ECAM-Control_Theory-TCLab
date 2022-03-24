@@ -111,7 +111,7 @@ def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, PVinit=0, man=F
     MVd = (Tfd/(Tfd+Ts)) * MVd_previous + ((Kc*Td)/(Tfd+Ts)) * (E - E_previous)
   
   # Manual mode ?
-  if man :
+  if man is True :
     MVi = constrain(manMV[-1], MVmin, MVmax) - MVp - MVd - MV_FF_previous
   else :
     if (MVp + MVi + MVd + MV_FF_previous) > MVmax :
