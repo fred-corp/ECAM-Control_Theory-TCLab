@@ -30,7 +30,7 @@ DV : (from ```Open_loop_experiment_on_DV_2022-03-22-20h49.txt```)
   * K: ```0.3121263632216402```
   * T: ```157.05200991036307```
   * theta: ```25.53148480398243```
-* Graphical :
+* Graphical (not necessary):
   * "simple" :
     * T = Tg : ```154.2857```
     * θ = Tu : ```17.14286```
