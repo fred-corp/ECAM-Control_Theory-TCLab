@@ -1,5 +1,5 @@
 # Lead-Lag
-def LeadLag_RT(MV,Kp,Tlag,Tlead,Ts,PV,PVInit=0,method='EBD'):
+def LeadLag_RT(MV,Kp,Tlag,Tlead,Ts,MVLL,PVInit=0,method='EBD'):
   
   """
   The function "FO_RT" needs to be included in a "for or while loop".
@@ -9,7 +9,7 @@ def LeadLag_RT(MV,Kp,Tlag,Tlead,Ts,PV,PVInit=0,method='EBD'):
   :Tlag: lag time constant [s]
   :Tlead: lead time constant [s]
   :Ts: sampling period [s]
-  :PV: output vector
+  :MVLL: output vector
   :PVInit: (optional: default value is 0)
   :method: discretisation method (optional: default value is 'EBD')
     EBD: Euler Backward difference
@@ -23,24 +23,36 @@ def LeadLag_RT(MV,Kp,Tlag,Tlead,Ts,PV,PVInit=0,method='EBD'):
 
 
   try :
-    PV_previous = PV[-1]
+    PV_previous = MVLL[-1]
   except :
     PV_previous = PVInit
-    return PV_previous
+    # return PV_previous
+
+  try :
+    MV_2 = MV[-2]
+  except :
+    MV_2 = 0
+  
+  try :
+    MV_1 = MV[-1]
+  except :
+    MV_1 = 0
 
   if (Tlag != 0):
     K = Ts/Tlag
     # MV[k+1] is MV[-1] and MV[k] is MV[-2]
     if method == 'EBD':
-      PVout = (1/(1+K))*PV_previous + (K*Kp/(1+K))*((1+Tlead/Ts)*MV[-1]-(Tlead/Ts)*MV[-2])
+      MVLLout = (1/(1+K))*PV_previous + (K*Kp/(1+K))*((1+Tlead/Ts)*MV_1-(Tlead/Ts)*MV_2)
     elif method == 'EFD':
-      PVout = (1-K)*PV_previous + K*Kp*((Tlead/Ts)*MV[-1]+(1-(Tlead/Ts))*MV[-2])
+      MVLLout = (1-K)*PV_previous + K*Kp*((Tlead/Ts)*MV_1+(1-(Tlead/Ts))*MV_2)
     else:
-      PVout = (1/(1+K))*PV_previous + (K*Kp/(1+K))*((1+Tlead/Ts)*MV[-1]-(Tlead/Ts)*MV[-2])
+      MVLLout = (1/(1+K))*PV_previous + (K*Kp/(1+K))*((1+Tlead/Ts)*MV_1-(Tlead/Ts)*MV_2)
   else:
-    PVout = Kp*MV[-1]
+    MVLLout = Kp*MV_1
 
-  return PVout
+  MVLL.append(MVLLout)
+
+  #return MVLLout
 
 # Constrain
 def constrain(val, min_val, max_val):
@@ -68,6 +80,12 @@ def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, PVinit=0, man=F
   • MVmax : maximum value of MV (default = 100)
   
   """
+
+  try :
+    E = SP - PV[-1]
+  except :
+    E = SP - PVinit
+
   try : 
     MVi_previous = MV["MVi"][-1]
   except :
@@ -82,11 +100,6 @@ def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, PVinit=0, man=F
     E_previous = MV["E"][-1]
   except :
     E_previous = 0
-
-  try :
-    E = SP - PV[-1]
-  except :
-    E = SP - PVinit
 
   try :
     MV_FF_previous = FF_MV[-1]
@@ -120,10 +133,16 @@ def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, PVinit=0, man=F
       MVi = MVmin - MVp - MVd - MV_FF_previous
 
   # Calculate MV
-  MV = MVp + MVi + MVd + MV_FF_previous
+  _MV = MVp + MVi + MVd + MV_FF_previous
 
-  output = {"MV": MV, "MVp": MVp, "MVi": MVi, "MVd": MVd, "E": E}
-  return output
+  MV["MV"].append(_MV)
+  MV["MVp"].append(MVp)
+  MV["MVi"].append(MVi)
+  MV["MVd"].append(MVd)
+  MV["E"].append(E)
+
+  #output = {"MV": MV, "MVp": MVp, "MVi": MVi, "MVd": MVd, "E": E}
+  #return output
 
 # IMC Tuning
 def IMC_Tuning(K, theta, Tc, T1, T2, T3=0, method='FOPDT'):
