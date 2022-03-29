@@ -120,10 +120,16 @@ def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, PVinit=0, man=F
       MVi = MVmin - MVp - MVd - MV_FF_previous
 
   # Calculate MV
-  MV = MVp + MVi + MVd + MV_FF_previous
+  _MV = MVp + MVi + MVd + MV_FF_previous
 
-  output = {"MV": MV, "MVp": MVp, "MVi": MVi, "MVd": MVd, "E": E}
-  return output
+  MV["MV"].append(_MV)
+  MV["MVp"].append(MVp)
+  MV["MVi"].append(MVi)
+  MV["MVd"].append(MVd)
+  MV["E"].append(E)
+
+  #output = {"MV": MV, "MVp": MVp, "MVi": MVi, "MVd": MVd, "E": E}
+  #return output
 
 # IMC Tuning
 def IMC_Tuning(K, theta, Tc, T1, T2, T3=0):
