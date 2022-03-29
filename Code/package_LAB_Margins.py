@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
 class Controller:
     
   def __init__(self, parameters):
@@ -8,7 +11,7 @@ class Controller:
     self.parameters['Td'] = parameters['Td'] if 'Td' in parameters else 0.0
     self.parameters['alpha'] = parameters['alpha'] if 'alpha' in parameters else 0.0
 
-def Bode(P, C,omega, Show = True):
+def Margins(P, C,omega, Show = True):
   
   """
   :P: Process as defined by the class "Process".
@@ -66,7 +69,7 @@ def Bode(P, C,omega, Show = True):
   Ps = np.multiply(Ps,PLead2)
 
   # Create params for C
-  Cs = C.parameters['Kc']*(1 + (1/Ti)*s + (Td*s)/(C.parameters['alpha'] * Td * s + 1))
+  Cs = C.parameters['Kc']*(1 + (1/C.parameters['Ti'])*s + (C.parameters['Td']*s)/(C.parameters['alpha'] * C.parameters['Td'] * s + 1))
 
   # Calculate values for Bode diagram of L=P*C
   Ls = np.multiply(Ps,Cs)
@@ -78,8 +81,22 @@ def Bode(P, C,omega, Show = True):
     fig.set_figheight(12)
     fig.set_figwidth(22)
 
+    gain = 20*np.log10(np.abs(Ls))
+    phase = (180/np.pi)*np.unwrap(np.angle(Ls))
+
+    gainCross = np.where(gain ==  0)
+    phaseCross = np.where(phase == -180)
+
+    print((gainCross, phaseCross))
+
     # Gain part
-    ax_gain.semilogx(omega,20*np.log10(np.abs(Ls)),label='L(s)')
+    point1 = [1, 0]
+    point2 = [1, -40]
+    x_values = [point1[0], point2[0]]
+    y_values = [point1[1], point2[1]]
+    ax_gain.plot(x_values, y_values, label='Gain margin')
+    ax_gain.semilogx(omega,gain,label='L(s)')
+    ax_gain.axhline(y=0, color='r', linestyle='-', label='0 dB')
     gain_min = np.min(20*np.log10(np.abs(Ls)/5))
     gain_max = np.max(20*np.log10(np.abs(Ls)*5))
     ax_gain.set_xlim([np.min(omega), np.max(omega)])
@@ -89,7 +106,9 @@ def Bode(P, C,omega, Show = True):
     ax_gain.legend(loc='best')
   
     # Phase part
-    ax_phase.semilogx(omega, (180/np.pi)*np.unwrap(np.angle(Ls)),label='L(s)')  
+    ax_phase.axvline(x=0.03, ymin=-40, ymax=0, label='Phase margin')
+    ax_phase.semilogx(omega, phase, label='L(s)') 
+    ax_phase.axhline(y=-180, color='r', linestyle='-', label='-180 deg')
     ax_phase.set_xlim([np.min(omega), np.max(omega)])
     ph_min = np.min((180/np.pi)*np.unwrap(np.angle(Ls))) - 10
     ph_max = np.max((180/np.pi)*np.unwrap(np.angle(Ls))) + 10
