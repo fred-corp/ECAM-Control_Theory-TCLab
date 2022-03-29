@@ -126,22 +126,34 @@ def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, PVinit=0, man=F
   return output
 
 # IMC Tuning
-def IMC_Tuning(K, theta, Tc, T1, T2, T3=0):
-  """
-  parameters :
-  • K : Kp => process gain
-  • theta : theta p => process offset
-  • Tc : Controller time constant
-  • T1 : processus first time constant
-  • T2 : processus second time constant
-  • T3 : processus third time constant
-  
-  returns Kc, Ti, Td
-  """
-  #IMC_Tuning only for an I case (check slide 186/224 of the course)
-  Kc = (T1+T2-T3)/((Tc + theta)*K)
-  Ti = T1 + T2 - T3
-  Td = (T1*T2-(T1 + T2 - T3)*T3)/(T1+T2-T3)
+def IMC_Tuning(K, theta, Tc, T1, T2, T3=0, method='FOPDT'):
+    """
+    parameters :
+    • K : Kp => process gain
+    • theta : theta p => process offset
+    • Tc : Controller time constant
+    • T1 : processus first time constant
+    • T2 : processus second time constant
+    • T3 : processus third time constant
 
-  return Kc,Ti,Td
+    returns Kc, Ti, Td
+    """
+    #IMC_Tuning only for an I case (check slide 186/224 of the course)
+    if method == 'SOPDT':
+        Kc = (T1+T2-T3)/((Tc + theta)*K)
+        Ti = T1 + T2 - T3
+        Td = (T1*T2-(T1 + T2 - T3)*T3)/(T1+T2-T3)
+        
+    #IMC_Tuning only for a case where T2p << T1p(check slide 186/224 of the course)
+    elif method == 'FOPDT':
+        #This is a G case
+        Kc = T1/((Tc+theta)*K)
+        Ti = T1
+        Td = 0
+        #This is a H case
+        #Kc = (T1+(theta/2))/((Tc+theta/2)*K)
+        #Ti = T1 + theta/2
+        #Td = (T1*theta)/(2*T1+theta)
+
+    return Kc,Ti,Td
 
