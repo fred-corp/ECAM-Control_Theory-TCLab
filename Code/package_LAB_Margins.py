@@ -84,17 +84,30 @@ def Margins(P, C,omega, Show = True):
     gain = 20*np.log10(np.abs(Ls))
     phase = (180/np.pi)*np.unwrap(np.angle(Ls))
 
-    gainCross = np.where(gain ==  0)
-    phaseCross = np.where(phase == -180)
+    # find index of gain where gain is close to 0
+    idx_gain_zero = np.argmin(np.abs(gain))
+
+    # find index of phase where phase is close to -180
+    idx_phase_neg180 = np.argmin(np.abs(phase - (-180)))
+    
+    gainCross = omega[idx_gain_zero]
+    phaseCross = omega[idx_phase_neg180]
 
     print((gainCross, phaseCross))
 
+    # Plot Bode diagram
+
+    ax_gain.set_title('Bode plot of L(s) with phase margin of {}, and gain margin of {}'.format(np.around(phaseCross, decimals=5), np.around(gainCross, decimals=5)))
+
     # Gain part
-    point1 = [1, 0]
-    point2 = [1, -40]
+
+    # Gain margin line
+    point1 = [phaseCross, gain[idx_phase_neg180]]
+    point2 = [phaseCross, 0]
     x_values = [point1[0], point2[0]]
     y_values = [point1[1], point2[1]]
     ax_gain.plot(x_values, y_values, label='Gain margin')
+
     ax_gain.semilogx(omega,gain,label='L(s)')
     ax_gain.axhline(y=0, color='r', linestyle='-', label='0 dB')
     gain_min = np.min(20*np.log10(np.abs(Ls)/5))
@@ -102,11 +115,17 @@ def Margins(P, C,omega, Show = True):
     ax_gain.set_xlim([np.min(omega), np.max(omega)])
     ax_gain.set_ylim([gain_min, gain_max])
     ax_gain.set_ylabel('Amplitude |L| [db]')
-    ax_gain.set_title('Bode plot of L')
     ax_gain.legend(loc='best')
   
     # Phase part
-    ax_phase.axvline(x=0.03, ymin=-40, ymax=0, label='Phase margin')
+
+    # Phase margin line
+    point1 = [gainCross, -180]
+    point2 = [gainCross, phase[idx_gain_zero]]
+    x_values = [point1[0], point2[0]]
+    y_values = [point1[1], point2[1]]
+    ax_phase.plot(x_values, y_values, label='Phase margin')
+
     ax_phase.semilogx(omega, phase, label='L(s)') 
     ax_phase.axhline(y=-180, color='r', linestyle='-', label='-180 deg')
     ax_phase.set_xlim([np.min(omega), np.max(omega)])
