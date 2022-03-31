@@ -97,7 +97,7 @@ def Margins(P, C,omega, Show = True):
 
     # Plot Bode diagram
 
-    ax_gain.set_title('Bode plot of L(s) with phase margin of {}, and gain margin of {}'.format(np.around(phaseCross, decimals=5), np.around(gainCross, decimals=5)))
+    ax_gain.set_title('Bode plot of L(s) with phase margin of {}°, and gain margin of {} dB'.format(np.around(180+phase[idx_gain_zero], decimals=3), np.around(gain[idx_phase_neg180], decimals=3)))
 
     # Gain part
 
