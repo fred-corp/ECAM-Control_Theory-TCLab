@@ -90,14 +90,13 @@ def Margins(P, C,omega, Show = True):
     # find index of phase where phase is close to -180
     idx_phase_neg180 = np.argmin(np.abs(phase - (-180)))
     
+    # find x values for gain and phase margins
     gainCross = omega[idx_gain_zero]
     phaseCross = omega[idx_phase_neg180]
 
-    print((gainCross, phaseCross))
-
     # Plot Bode diagram
 
-    ax_gain.set_title('Bode plot of L(s) with phase margin of {}°, and gain margin of {} dB'.format(np.around(180+phase[idx_gain_zero], decimals=3), np.around(gain[idx_phase_neg180], decimals=3)))
+    ax_gain.set_title('Bode plot of L(s), with phase margin of {}°, and gain margin of {} dB'.format(np.around(180+phase[idx_gain_zero], decimals=3), np.around(gain[idx_phase_neg180], decimals=3)))
 
     # Gain part
 
