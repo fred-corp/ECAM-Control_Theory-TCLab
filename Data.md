@@ -44,7 +44,11 @@ MV : (from ```Open_loop_experiment_on_MV_2022-03-01-09h52.txt```)
   * K: ```0.568729702885908```  
   * T1: ```172.40926097266686```  
   * T2: ```2.8511434253226774e-05```  
-  * theta: ```1.9999999968968731```  
+  * theta: ```1.9999999968968731``` 
+* Graphical method: 
+  * T1: ```13.83```  
+  * T2: ```74.72```  
+  * theta: ```3.06``` 
 
 DV : (from ```Open_loop_experiment_on_DV_2022-03-22-20h49.txt```)
 * Default params:
