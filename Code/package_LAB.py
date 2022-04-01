@@ -123,14 +123,14 @@ def PID_RT(PV, SP, MV, Ts, Kc, Ti, Td, alpha, approximationType, PVinit=0, man=F
   elif approximationType[1] == "EBD":
     MVd = (Tfd/(Tfd+Ts)) * MVd_previous + ((Kc*Td)/(Tfd+Ts)) * (E - E_previous)
   
-  # Manual mode ?
+  # Manual PID mode ?
   if man is True :
-    MVi = constrain(manMV[-1], MVmin, MVmax) - MVp - MVd - MV_FF_previous
-  else :
-    if (MVp + MVi + MVd + MV_FF_previous) > MVmax :
-      MVi = MVmax - MVp - MVd - MV_FF_previous
-    if (MVp + MVi + MVd + MV_FF_previous) < MVmin :
-      MVi = MVmin - MVp - MVd - MV_FF_previous
+    MVi = constrain(manMV[-1], MVmin, MVmax) - MVp - MVd
+  
+  if (MVp + MVi + MVd + MV_FF_previous) > MVmax :
+    MVi = MVmax - MVp - MVd - MV_FF_previous
+  if (MVp + MVi + MVd + MV_FF_previous) < MVmin :
+    MVi = MVmin - MVp - MVd - MV_FF_previous
 
   # Calculate MV
   _MV = MVp + MVi + MVd + MV_FF_previous
