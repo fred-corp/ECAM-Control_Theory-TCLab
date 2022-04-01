@@ -4,4 +4,4 @@ This repo contains the code and report files for the Control Theory Lab from 3rd
 
 ## TODO
 
-[] find DV dynamics
+* Write report
