@@ -7,7 +7,11 @@ This repo contains the code and report files for the Control Theory Lab from 3rd
 The different files in this repo were created following the rules of the laboratory assignment assignment.  
 Here's a short description of the structure of thie repo
 
-### Data.md
+### ```AU4C Control Theory - Rapport.pdf```
+
+This PDF document is our lab report.
+
+### ```Data.md```
 
 This file contains the evaluated dynamics parameter for P(s) and D(s) using a Firs-Order plus delay and Second-Order plus delay model.
 
