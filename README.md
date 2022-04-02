@@ -13,8 +13,8 @@ This file contains the evaluated dynamics parameter for P(s) and D(s) using a Fi
 
 ### Code folder
 
-This folder containd the codes used to make the identifications and experiments of the laboratory.  
-We're only going to explain the files we had to write (not the ones that were given by our teacher (```TCLab_test.ipynb```, ```TCLab_OLP.ipynb```, ```package_DBR.py```, ```package_DBR.ipynb```, ```Identification_FOPDT.ipynb```, ```Identification_SOPDT.ipynb```))
+This folder contains the codes used to make the identifications and experiments of the laboratory.  
+We're only going to explain the files we had to write (not the ones that were given by our teacher (```TCLab_test.ipynb```, ```TCLab_OLP.ipynb```, ```package_DBR.py```, ```package_DBR.ipynb```, ```Identification_FOPDT.ipynb```, ```Identification_SOPDT.ipynb```)).
 
 #### ```package_LAB.py```
 
